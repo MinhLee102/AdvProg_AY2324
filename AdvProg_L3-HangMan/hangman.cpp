@@ -20,6 +20,8 @@ int generateRandomNumber(const int min, const int max)
     int random = rand()%max;
     if (random < min)
         random += min;
+    if (min == max)
+        random = max;
     return random;
 }
 
