@@ -136,7 +136,6 @@ void updateEnteredChars(const char ch, string& chars){
 ***/
 void updateIncorrectGuess(int& incorrectGuess){
     // TODO: increase the value of incorrectGuess by 1
-    if (!isCharInWord)
         incorrectGuess++;
 }
 
@@ -164,7 +163,7 @@ void processData(const char ch, const string& word,
             update incorrectGuess: call updateIncorrectGuess() function
             update incorrectChars: call updateEnteredChars() function
     ***/
-   if (isCharInWord)
+   if (isCharInWord == true)
    {
         updateSecretWord(secretWord, ch, word);
         updateEnteredChars(ch, correctChars);
