@@ -79,7 +79,7 @@ map<char, int> countOccurrences(const vector<string>& candidateWords)
 
 char findMostFrequentChar(const map<char, int>& occurrences, const set<char>& selectedChars)
 {
-    char answer;
+    char answer = ' ';
     //Write your code here
     int MostFrequent = 0;
     for (auto it : occurrences){
@@ -103,11 +103,11 @@ char findBestChar(const vector<string>& candidateWords, const set<char>& selecte
 {
     char answer;
     //Write your code here
-    map<char, int> occurrences;
-
-    countOccurrences(candidateWords);
+    map<char, int> occurrences = countOccurrences(candidateWords);
 
     answer = findMostFrequentChar(occurrences, selectedChars);
+    if(answer == ' ')
+        return nextCharWhenWordIsNotInDictionary(selectedChars);
     return answer;
 }
 
@@ -130,16 +130,12 @@ string getWordMask(char nextChar)
 
 bool isCorrectChar(char ch, const string& mask)
 {
-    bool answer;
+    bool answer = false;
     //Write your code here
     for (int i = 0; i < mask.size(); i++)
     {
         if(ch == mask[i]){
             answer = true;
-            break;
-        }
-        else
-            answer = false;
     }
     return answer;
 }
@@ -190,9 +186,9 @@ bool wordConformToMask(const string& word, const string& mask, char ch)
         answer = false;
     for (int i = 0; i < mask.size(); i++)
     {
-        if(mask[i] >= 'a' && mask[i] <= 'z')
+        if(ch == mask[i])
         {
-            if (mask[i] != word[i])
+            if (ch != word[i])
                 answer = false;
         }
         else
