@@ -14,7 +14,7 @@ int readWordLen()
     cout << endl << "Enter the number characters of your secret word: ";
     cin >> wordLen;
     return wordLen;
-    
+
 }
 
 /***
@@ -27,7 +27,9 @@ int readWordLen()
 vector<string> filterWordsByLen(int wordLen, const vector<string>& vocabulary)
 {
     vector<string> answer;
-    //Write your code here
+    for (int i = 0; i < (int)vocabulary.size(); i++)
+        if (vocabulary[i].length() == wordLen)
+            answer.push_back(vocabulary[i]);
     return answer;
 }
 
@@ -41,13 +43,18 @@ vector<string> filterWordsByLen(int wordLen, const vector<string>& vocabulary)
 char nextCharWhenWordIsNotInDictionary(const set<char>& selectedChars)
 {
     char answer;
-    //Write your code here
+    for (char i = 'a'; i <= 'z'; i++){
+    if(selectedChars.find(i) == selectedChars.end()){
+            answer = i;
+            break;
+        }
+    }
     return answer;
 }
 
 /***
     Args:
-        candidateWords (vector<string>): The candidate words for the current given string 
+        candidateWords (vector<string>): The candidate words for the current given string
     Returns:
         answer (map) : The map which count the occurences of character in the set of candidate words
 ***/
@@ -55,7 +62,10 @@ char nextCharWhenWordIsNotInDictionary(const set<char>& selectedChars)
 map<char, int> countOccurrences(const vector<string>& candidateWords)
 {
     map<char, int> answer;
-    //Write your code here
+    for (auto it : candidateWords){
+        for (int j = 0; j < it.size(); j++)
+            answer[it[j]]++;
+    }
     return answer;
 }
 
@@ -69,14 +79,21 @@ map<char, int> countOccurrences(const vector<string>& candidateWords)
 
 char findMostFrequentChar(const map<char, int>& occurrences, const set<char>& selectedChars)
 {
-    char answer;
+    char answer = ' ';
     //Write your code here
+    int MostFrequent = 0;
+    for (auto it : occurrences){
+        if (selectedChars.find(it.first) != selectedChars.end() || it.second <= MostFrequent)
+            continue;
+        MostFrequent = it.second;
+        answer = it.first;
+    }
     return answer;
 }
 
 /***
     Args:
-        candidateWords (vector<string>): The candidate words for the current given string 
+        candidateWords (vector<string>): The candidate words for the current given string
         selectedChars (set<char>): The predicted characters
     Returns:
         answer (char) : The most suitable character for prediction
@@ -86,6 +103,9 @@ char findBestChar(const vector<string>& candidateWords, const set<char>& selecte
 {
     char answer;
     //Write your code here
+    map<char, int> occurrences = countOccurrences(candidateWords);
+
+    answer = findMostFrequentChar(occurrences, selectedChars);
     return answer;
 }
 
@@ -110,6 +130,7 @@ bool isCorrectChar(char ch, const string& mask)
 {
     bool answer;
     //Write your code here
+    answer = isCharInWord(ch, mask);
     return answer;
 }
 
@@ -125,6 +146,15 @@ bool isWholeWord(const string& mask)
 {
      bool answer;
     //Write your code here
+    for(int i = 0; i < mask.size(); i++){
+        if (mask[i] >= 'a' && mask[i] <= 'z')
+            answer = true;
+        else
+        {
+            answer = false;
+            break;
+        }
+    }
     return answer;
 }
 
@@ -140,11 +170,14 @@ bool isWholeWord(const string& mask)
                  - True: mask(-ood), char 'd'  vs word(good)
 
 ***/
-bool wordConformToMask(const string& word, const string& mask, char ch) 
+bool wordConformToMask(const string& word, const string& mask, char ch)
 {
-    bool answer;
-    //Write your code here
-    return answer;
+    for (int i = 0; i < (int)mask.size(); i++)
+    {
+        if(ch == mask[i] && ch != word[i])
+            return false;
+    }
+    return true;
 }
 
 /***
@@ -163,5 +196,9 @@ vector<string> filterWordsByMask(const vector<string>& words, const string& mask
 {
     vector<string> answer;
     //Write your code here
+    for (auto it : words){
+        if (wordConformToMask(it, mask, ch))
+            answer.push_back(it);
+    }
     return answer;
 }
